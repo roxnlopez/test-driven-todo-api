@@ -54,34 +54,50 @@ app.get('/api/todos', function index(req, res) {
   res.json({todos: todos});
 });
 
+var i = 3;
 app.post('/api/todos', function create(req, res) {
   var newObject = {
-    "_id":todos.length +=1,
+    "_id":req.body._id,
     "task":req.body.task,
     "description":req.body.description
     };
-    res.send(newObject);
+    newObject._id = (i++);
+    res.json(newObject);
 });
 
 app.get('/api/todos/:id', function show(req, res) {
-  var newId = req.params.id;
-  var singleTodo;
+  var newId;
   for (var i=0; i<todos.length; i++) {
-      if (newId == todos[i].id) {
-        singleTodo = todos[i];
+      if(req.params.id == todos[i]._id) {
+      newId = todos[i];
     }
-  res.json(todos[i].id);
-  //try for loop, remember to stop loop
-  }
+    }
+  res.json(newId);
 });
 
 app.put('/api/todos/:id', function update(req, res) {
-  res.json(todos[req.params.id-1]);
+  var newUpdate;
+  for (var i=0; i<todos.length; i++){
+    if (req.params.id == todos[i]._id) {
+      newUpdate._id = req.body._id;
+      newUpdate = parseInt(req.body._id);
+      newUpdate.task = req.body.task;
+      newUpdate.description = req.body.description;
+      todos.splice(i, 1, newUpdate);
+    }
+  }
+  res.json(newUpdate);
 });
 
 app.delete('/api/todos/:id', function destroy(req, res) {
-  todos.splice(req.params.id-1,1);
-  res.json(req.body);
+  var deleteTodo;
+  for (var i=0; i<todos.length; i++) {
+    if(req.params.id == todos[i]._id){
+      deleteTodo = todos[i];
+      todos.splice(i, 1);
+    }
+  }
+  res.json(deleteTodo);
 });
 
 /**********
