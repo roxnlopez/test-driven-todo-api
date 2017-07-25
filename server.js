@@ -64,25 +64,24 @@ app.post('/api/todos', function create(req, res) {
 });
 
 app.get('/api/todos/:id', function show(req, res) {
-  res.send('id' + req.params.id);
+  var newId = req.params.id;
+  var singleTodo;
+  for (var i=0; i<todos.length; i++) {
+      if (newId == todos[i].id) {
+        singleTodo = todos[i];
+    }
+  res.json(todos[i].id);
   //try for loop, remember to stop loop
+  }
 });
 
 app.put('/api/todos/:id', function update(req, res) {
-  // for (var i=0; i<todos.length; i++) {
-  //   todos.update=(todos[req.params.id]);
-  //   res.send(todos);
-  // }
+  res.json(todos[req.params.id-1]);
 });
 
 app.delete('/api/todos/:id', function destroy(req, res) {
-  var deleteId = req.params.id;
-  for (var i=0; i<todos.lenth; i++){
-      if(deleteId == todos[i]) {
-         todos.splice(i, 1);
-      }
-  res.json(deleteId);
-  }
+  todos.splice(req.params.id-1,1);
+  res.json(req.body);
 });
 
 /**********
