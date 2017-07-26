@@ -54,14 +54,16 @@ app.get('/api/todos', function index(req, res) {
   res.json({todos: todos});
 });
 
-var i = 3;
+var currentId = 3;
 app.post('/api/todos', function create(req, res) {
+  console.log(req.body);
   var newObject = {
     "_id":req.body._id,
     "task":req.body.task,
     "description":req.body.description
     };
-    newObject._id = (i++);
+    newObject._id = (++currentId);
+    todos.push(newObject);
     res.json(newObject);
 });
 
@@ -74,16 +76,23 @@ app.get('/api/todos/:id', function show(req, res) {
     }
   res.json(newId);
 });
-
+/*
+---------------------------------------------------------------
+PUT
+---------------------------------------------------------------
+*/
 app.put('/api/todos/:id', function update(req, res) {
-  var newUpdate;
+  var newUpdate = {
+    "_id":parseInt(req.params.id),
+    "task":req.body.task,
+    "description":req.body.description
+  };
   for (var i=0; i<todos.length; i++){
     if (req.params.id == todos[i]._id) {
-      newUpdate._id = req.body._id;
-      newUpdate = parseInt(req.body._id);
-      newUpdate.task = req.body.task;
-      newUpdate.description = req.body.description;
-      todos.splice(i, 1, newUpdate);
+      todos[i] = newUpdate;
+      console.log(todos[i]);
+      //res.json(newUpdate);
+      //todos.splice(i, 1, newUpdate);
     }
   }
   res.json(newUpdate);
